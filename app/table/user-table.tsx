@@ -28,13 +28,20 @@ import {
   PaginationPrevious,
 } from "@/components/ui/pagination";
 
+/**
+ * Renders a table component that displays user comments.
+ * @param fetchTableData - Function to fetch table data.
+ */
 export default function Component({ fetchTableData }: any) {
+  //TODO: Add types for fetchTableData. Uses a server action to fetch table data.
   const router = useRouter();
   const searchParams = useSearchParams();
   const [tableData, setTableData] = useState<MergedData[] | any>([]);
+  //TODO: Remove any type from tableData
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
+    //  Fetches table data and updates the state.
     async function getTableData() {
       setLoading(true);
       const currentPage = searchParams.get("page") || 1;
@@ -44,18 +51,21 @@ export default function Component({ fetchTableData }: any) {
     getTableData();
   }, [fetchTableData, searchParams]);
 
+  // Handles the click event for the next page button.
   async function nextPageClick() {
     const currentPage = searchParams.get("page") || 1;
     currentPage !== "9" &&
       router.push(`/table?page=${String(+currentPage + 1)}`);
   }
 
+  //Handles the click event for the previous page button.
   async function previousPageClick() {
     const currentPage = searchParams.get("page") || 1;
     currentPage !== "1" &&
       router.push(`/table?page=${String(+currentPage - 1)}`);
   }
 
+  // If there is an error in the table data, display an error message
   if (tableData?.error) {
     return (
       <div>
@@ -67,6 +77,7 @@ export default function Component({ fetchTableData }: any) {
 
   return (
     <Suspense>
+      {/*TODO: Add a fallback loading component to display while the table data is being fetched */}
       <div className="flex min-h-screen flex-col items-center pt-2">
         {loading ? (
           <LoadingTable />
@@ -94,6 +105,7 @@ export default function Component({ fetchTableData }: any) {
                   </TableRow>
                 </TableHeader>
                 <TableBody>
+                  {/* Render each user data row */}
                   {tableData.map((user: MergedData) => (
                     <TableRow key={user?.id} className="bg-accent">
                       <TableCell>
@@ -115,6 +127,7 @@ export default function Component({ fetchTableData }: any) {
                 </TableBody>
               </Table>
             </CardContent>
+            {/* Pagination component */}
             <Pagination className="pb-4">
               <PaginationContent>
                 <PaginationItem>

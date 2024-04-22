@@ -1,3 +1,4 @@
+// Function takes an error object or message and returns a string representation of the error message.
 export const getErrorMessage = (error: unknown): string => {
     let message: string;
     if (error instanceof Error) {
@@ -10,4 +11,4 @@ export const getErrorMessage = (error: unknown): string => {
         message = 'An error occurred. Please try again later.';
     }
     return message;
-  }
+}

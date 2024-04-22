@@ -28,6 +28,11 @@ import {
 
 import { Skeleton } from "@/components/ui/skeleton";
 
+/**
+ * Renders a loading table component that displays skeleton placeholders for data.
+ * This component is used to show a loading state while data is being fetched for the user-table.
+ */
+
 function LoadingTable() {
   const numbers = Array.from({ length: 10 }, (_, index) => index + 1);
 
@@ -51,28 +56,28 @@ function LoadingTable() {
                 <TableHead className="text-right">Post Contents</TableHead>
               </TableRow>
             </TableHeader>
-              <TableBody>
-                {numbers.map((num) => (
-                  <TableRow key={num} className="bg-accent">
-                    <TableCell>
-                      <Skeleton className="h-9 w-24" />
-                    </TableCell>
-                    <TableCell className="hidden sm:table-cell">
-                      <Skeleton className="h-9 w-32" />
-                    </TableCell>
+            <TableBody>
+              {numbers.map((num) => (
+                <TableRow key={num} className="bg-accent">
+                  <TableCell>
+                    <Skeleton className="h-9 w-24" />
+                  </TableCell>
+                  <TableCell className="hidden sm:table-cell">
+                    <Skeleton className="h-9 w-32" />
+                  </TableCell>
 
-                    <TableCell className="hidden sm:table-cell">
-                      <Skeleton className="h-9 w-24" />
-                    </TableCell>
-                    <TableCell className="hidden md:table-cell">
-                      <Skeleton className="h-9 w-64 " />
-                    </TableCell>
-                    <TableCell className="text-right">
-                      <Skeleton className="h-9 w-[50rem]" />
-                    </TableCell>
-                  </TableRow>
-                ))}
-              </TableBody>
+                  <TableCell className="hidden sm:table-cell">
+                    <Skeleton className="h-9 w-24" />
+                  </TableCell>
+                  <TableCell className="hidden md:table-cell">
+                    <Skeleton className="h-9 w-64 " />
+                  </TableCell>
+                  <TableCell className="text-right">
+                    <Skeleton className="h-9 w-[50rem]" />
+                  </TableCell>
+                </TableRow>
+              ))}
+            </TableBody>
           </Table>
         </CardContent>
         <Pagination className="pb-4">
