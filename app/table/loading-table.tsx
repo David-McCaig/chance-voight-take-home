@@ -29,7 +29,7 @@ import {
 import { Skeleton } from "@/components/ui/skeleton";
 
 function LoadingTable() {
-  const numbers = Array.from({ length: 8 }, (_, index) => index + 1);
+  const numbers = Array.from({ length: 10 }, (_, index) => index + 1);
 
   return (
     <div className="flex min-h-screen flex-col  items-center pt-2">

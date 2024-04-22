@@ -10,7 +10,7 @@ export async function fetchTableData(currentPage: number): Promise<MergedData[] 
       "https://jsonplaceholder.typicode.com/users"
     );
     const postsResponse: AxiosResponse<Post[]> = await axios.get<Post[]>(
-      `https://jsonplaceholder.typicode.com/posts?_start=${String(+currentPage * 10)}&_limit=8`
+      `https://jsonplaceholder.typicode.com/posts?_start=${String(+currentPage * 10)}&_limit=10`
     );
 
     const mergedData: MergedData[] = postsResponse.data.map((post: Post) => {
