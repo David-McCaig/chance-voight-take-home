@@ -2,6 +2,7 @@
 import { useEffect, useState } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import { MergedData, Post, User } from "../lib/definitions";
+import LoadingTable from "./loading-table";
 import {
   Card,
   CardContent,
@@ -30,34 +31,39 @@ export default function Component({fetchTableData}: any) {
 
   const router = useRouter();
   const searchParams = useSearchParams();
-  const [data, setData] = useState<MergedData[]>([]);
+  const [tableData, setTableData] = useState<MergedData[]>([]);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     async function getTableData() {
-      router.push("/table?page=0");
       const currentPage = searchParams.get("page") || 1;
-      setData(await fetchTableData(currentPage));
+      setTableData(await fetchTableData(currentPage));
+      setLoading(false);
     }
     getTableData();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   async function nextPageClick() {
+    setLoading(true);
     const currentPage = searchParams.get("page") || 1;
     router.push(`/table?page=${String(+currentPage + 1)}`);
-    setData(await fetchTableData(String(+currentPage + 1)));
+    setTableData(await fetchTableData(String(+currentPage + 1)));
+    setLoading(false);
   }
 
   async function previousPageClick() {
+    setLoading(true);
     const currentPage = searchParams.get("page") || 1;
     currentPage !== "1" &&
       router.push(`/table?page=${String(+currentPage - 1)}`);
-    setData(await fetchTableData(String(+currentPage - 1)));
+    setTableData(await fetchTableData(String(+currentPage - 1)));
+    setLoading(false);
   }
 
   return (
     <div className="flex min-h-screen flex-col items-center pt-2">
-      <Card className="w-11/12 h-11/12">
+      {loading ? <LoadingTable/> : <Card className="w-11/12 h-11/12">
         <CardHeader className="px-7">
           <CardTitle>Orders</CardTitle>
           <CardDescription>Recent orders from your store.</CardDescription>
@@ -76,7 +82,7 @@ export default function Component({fetchTableData}: any) {
               </TableRow>
             </TableHeader>
               <TableBody>
-                {data.map((user: MergedData) => (
+                {tableData.map((user: MergedData) => (
                   <TableRow key={user?.id} className="bg-accent">
                     <TableCell>
                       <div className="font-medium">{user?.name}</div>
@@ -95,7 +101,9 @@ export default function Component({fetchTableData}: any) {
                   </TableRow>
                 ))}
               </TableBody>
-              <Pagination className="pb-4">
+          </Table>
+        </CardContent>
+        <Pagination className="pb-4">
           <PaginationContent>
             <PaginationItem>
               <PaginationPrevious onClick={previousPageClick} />
@@ -105,9 +113,7 @@ export default function Component({fetchTableData}: any) {
             </PaginationItem>
           </PaginationContent>
         </Pagination>
-          </Table>
-        </CardContent>
-      </Card>
+      </Card>}
     </div>
   );
 }

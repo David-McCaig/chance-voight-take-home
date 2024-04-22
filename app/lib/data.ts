@@ -15,7 +15,6 @@ export async function fetchTableData(currentPage: number): Promise<MergedData[] 
 
     const mergedData: MergedData[] = postsResponse.data.map((post: Post) => {
       const [user] = usersResponse.data.filter((user: User) => user.id === post.userId);
-      console.log(post)
       return {
       // userId: post.userId, // Add the userId property
       name: user.name,
