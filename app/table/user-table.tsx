@@ -3,6 +3,7 @@ import { useEffect, useState } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import { MergedData} from "../lib/definitions";
 import LoadingTable from "./loading-table";
+import { Suspense } from 'react'
 import {
   Card,
   CardContent,
@@ -76,6 +77,7 @@ export default function Component({ fetchTableData }: any) {
   }
 
   return (
+    <Suspense>
     <div className="flex min-h-screen flex-col items-center pt-2">
       {loading ? (
         <LoadingTable />
@@ -135,5 +137,6 @@ export default function Component({ fetchTableData }: any) {
         </Card>
       )}
     </div>
+    </Suspense>
   );
 }
