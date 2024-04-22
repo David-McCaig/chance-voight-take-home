@@ -1,7 +1,7 @@
 "use client";
 import { useEffect, useState } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
-import { MergedData, Post, User } from "../lib/definitions";
+import { MergedData} from "../lib/definitions";
 import LoadingTable from "./loading-table";
 import {
   Card,
@@ -30,14 +30,14 @@ import {
 export default function Component({ fetchTableData }: any) {
   const router = useRouter();
   const searchParams = useSearchParams();
-  const [tableData, setTableData] = useState<MergedData[]>([]);
+  const [tableData, setTableData] = useState<MergedData[] | any>([]);
   const [loading, setLoading] = useState(true);
-console.log(tableData)
+
   useEffect(() => {
     async function getTableData() {
-      const currentPage = searchParams.get("page") || 1;
-      setTableData(await fetchTableData(currentPage));
-      setLoading(false);
+        const currentPage = searchParams.get("page") || 1;
+        setTableData(await fetchTableData(currentPage));
+        setLoading(false);
     }
     getTableData();
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -49,8 +49,9 @@ console.log(tableData)
     if (currentPage !== "9") {
       router.push(`/table?page=${String(+currentPage + 1)}`);
       setTableData(await fetchTableData(String(+currentPage + 1)));
+      setLoading(false);
     }
-    setLoading(false);
+    
   }
 
   async function previousPageClick() {
@@ -59,8 +60,19 @@ console.log(tableData)
     if (currentPage !== "1") {
       router.push(`/table?page=${String(+currentPage - 1)}`);
       setTableData(await fetchTableData(String(+currentPage - 1)));
+      setLoading(false);
     }
-    setLoading(false);
+    
+  }
+
+  if (tableData?.error) {
+    // Check if it's an Error object
+    return (
+      <div>
+        <p>{tableData?.error}</p>
+        <p>Please try again</p>
+      </div>
+    );
   }
 
   return (
