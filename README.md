@@ -1,37 +1,47 @@
-This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
+## chance-voight-take-home
 
-## Getting Started
+Checkout the live site here 👉   [chance-voight-take-home](https://chance-voight-take-home-n9mr.vercel.app/table?page=0)
 
-First, run the development server:
+
+## My approach 
+
+The first thing I did before starting this project was I sketched out a little plan for myself using eraser.io. I always find it's nice to plan out features I'd like to implement as well as what order I'd like to implement them to make everything as efficient as possible. After planning everything out I created my folder structure. I created a lib folder which held a data.ts file for fetching data, a definitions.ts to store all of my types for TypeScript and a utils file to hold any utility functions that I might make along the way. I also created one route for the table.
+
+The data fetching was done using the newer server actions. Fetching data   on the server allowed me to only send the data I needed to the client. It can also be a more secure way of doing things since you're not exposing sensitive information like a user id. 
+
+I implemented pagination for the table to reduce the amount of data that is being fetched every time the user loads the page. I ended up using the router to store the page number state in the url. I really like using this pattern because it means less state variables and it also creates a better user experience where users can bookmark the page that they are on.
+
+I also set up a loading skeleton to give the user feedback when they are fetching more data. I've also set up error handling when there is an issue with fetching data. I set up a utility function that converts the error message format into a readable string so the user has a better idea what the issue might be.
+
+## Challenges faced along the way
+
+One challenge that I ran into was implementing a fallback loading screen using suspense. I think part of the issue might have been where I was fetching the data which was causing the fallback to not run. In the end I decided to create a loading state variable in the user-table and use conditional rendering to implement the loading skeleton. If I had more time I would have problem solved the issue I was having with suspense and the fallback.
+
+## Some things I would have added if I had more time.
+
+Some things I would have added if I had time would have been a way to search for different users and possibly a filter as well.  I would have also figured out a way to only fetch the user data that I needed for the page. At the moment I'm fetching all the user data every time I change the page. I would have also implemented an error tracking system like Sentry so I can know if users are experiencing any bugs while using the app.
+
+## Run Locally
+
+Clone the project
 
 ```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+  git git@github.com:David-McCaig/chance-voight-take-home.git
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Go to the project directory
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+cd into chance-voight-take-home
 
-This project uses [`next/font`](https://nextjs.org/docs/basic-features/font-optimization) to automatically optimize and load Inter, a custom Google Font.
+Install dependencies
 
-## Learn More
+```bash
+  npm install 
+```
 
-To learn more about Next.js, take a look at the following resources:
+Start the server on the client side 
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js/) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/deployment) for more details.
-# chance-voight-take-home
+```bash
+  npm run start
+```
+Now the app should be live! 

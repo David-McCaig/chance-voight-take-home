@@ -61,7 +61,7 @@ export default function Component({ fetchTableData }: any) {
   //Handles the click event for the previous page button.
   async function previousPageClick() {
     const currentPage = searchParams.get("page") || 1;
-    currentPage !== "1" &&
+    currentPage !== "0" &&
       router.push(`/table?page=${String(+currentPage - 1)}`);
   }
 
