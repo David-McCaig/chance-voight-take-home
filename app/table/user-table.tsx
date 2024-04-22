@@ -36,36 +36,27 @@ export default function Component({ fetchTableData }: any) {
 
   useEffect(() => {
     async function getTableData() {
+      setLoading(true);
       const currentPage = searchParams.get("page") || 1;
       setTableData(await fetchTableData(currentPage));
       setLoading(false);
     }
     getTableData();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  }, [fetchTableData, searchParams]);
 
   async function nextPageClick() {
-    setLoading(true);
     const currentPage = searchParams.get("page") || 1;
-    if (currentPage !== "9") {
+    currentPage !== "9" &&
       router.push(`/table?page=${String(+currentPage + 1)}`);
-      setTableData(await fetchTableData(String(+currentPage + 1)));
-    }
-    setLoading(false);
   }
 
   async function previousPageClick() {
-    setLoading(true);
     const currentPage = searchParams.get("page") || 1;
-    if (currentPage !== "1") {
+    currentPage !== "1" &&
       router.push(`/table?page=${String(+currentPage - 1)}`);
-      setTableData(await fetchTableData(String(+currentPage - 1)));
-    }
-    setLoading(false);
   }
 
   if (tableData?.error) {
-    // Check if it's an Error object
     return (
       <div>
         <p>{tableData?.error}</p>
@@ -82,8 +73,8 @@ export default function Component({ fetchTableData }: any) {
         ) : (
           <Card className="w-11/12 h-11/12">
             <CardHeader className="px-7">
-              <CardTitle>Orders</CardTitle>
-              <CardDescription>Recent orders from your store.</CardDescription>
+              <CardTitle>User comments</CardTitle>
+              <CardDescription>All the user comments</CardDescription>
             </CardHeader>
             <CardContent>
               <Table>
