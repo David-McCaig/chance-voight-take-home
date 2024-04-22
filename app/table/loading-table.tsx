@@ -40,8 +40,8 @@ function LoadingTable() {
     <div className="flex min-h-screen flex-col  items-center pt-2">
       <Card className="">
         <CardHeader className="px-7">
-          <CardTitle>Orders</CardTitle>
-          <CardDescription>Recent orders from your store.</CardDescription>
+          <CardTitle>User comments</CardTitle>
+          <CardDescription>All the user comments</CardDescription>
         </CardHeader>
         <CardContent>
           <Table>
