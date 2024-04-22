@@ -1,6 +1,7 @@
 "use client";
 import { useEffect, useState } from "react";
-
+import { useRouter, useSearchParams } from "next/navigation";
+import { MergedData, Post, User } from "../lib/definitions";
 import {
   Card,
   CardContent,
@@ -17,18 +18,42 @@ import {
   TableRow,
 } from "@/components/ui/table";
 
-export default function Component({ fetchTableData}: any) {
+import {
+    Pagination,
+    PaginationContent,
+    PaginationItem,
+    PaginationNext,
+    PaginationPrevious,
+  } from "@/components/ui/pagination";
 
-  const [data, setData] = useState<any>([]);
+export default function Component({fetchTableData}: any) {
 
+  const router = useRouter();
+  const searchParams = useSearchParams();
+  const [data, setData] = useState<MergedData[]>([]);
 
   useEffect(() => {
     async function getTableData() {
-      setData(await fetchTableData());
+      router.push("/table?page=0");
+      const currentPage = searchParams.get("page") || 1;
+      setData(await fetchTableData(currentPage));
     }
     getTableData();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
+
+  async function nextPageClick() {
+    const currentPage = searchParams.get("page") || 1;
+    router.push(`/table?page=${String(+currentPage + 1)}`);
+    setData(await fetchTableData(String(+currentPage + 1)));
+  }
+
+  async function previousPageClick() {
+    const currentPage = searchParams.get("page") || 1;
+    currentPage !== "1" &&
+      router.push(`/table?page=${String(+currentPage - 1)}`);
+    setData(await fetchTableData(String(+currentPage - 1)));
+  }
 
   return (
     <div className="flex min-h-screen flex-col items-center pt-2">
@@ -51,7 +76,7 @@ export default function Component({ fetchTableData}: any) {
               </TableRow>
             </TableHeader>
               <TableBody>
-                {data.map((user: any) => (
+                {data.map((user: MergedData) => (
                   <TableRow key={user?.id} className="bg-accent">
                     <TableCell>
                       <div className="font-medium">{user?.name}</div>
@@ -70,6 +95,16 @@ export default function Component({ fetchTableData}: any) {
                   </TableRow>
                 ))}
               </TableBody>
+              <Pagination className="pb-4">
+          <PaginationContent>
+            <PaginationItem>
+              <PaginationPrevious onClick={previousPageClick} />
+            </PaginationItem>
+            <PaginationItem>
+              <PaginationNext onClick={nextPageClick} />
+            </PaginationItem>
+          </PaginationContent>
+        </Pagination>
           </Table>
         </CardContent>
       </Card>

@@ -1,55 +1,37 @@
-import axios from "axios";
+import axios, { AxiosResponse } from "axios";
 import { getErrorMessage } from "./utils";
+import { MergedData, Post, User } from "./definitions";
 
-type User = {
-  id: number;
-  name: string;
-  email: string;
-  company: {
-    name: string;
-  };
-}
+export async function fetchTableData(currentPage: number): Promise<MergedData[] | { error: string }> {
+  'use server'
+  try {
+    console.log(currentPage);
+    const usersResponse: AxiosResponse<User[]> = await axios.get<User[]>(
+      "https://jsonplaceholder.typicode.com/users"
+    );
+    const postsResponse: AxiosResponse<Post[]> = await axios.get<Post[]>(
+      `https://jsonplaceholder.typicode.com/posts?_start=${String(+currentPage * 10)}&_limit=8`
+    );
 
-type Post = {
-  userId: number;
-  title: string;
-  body: string;
-}
+    const mergedData: MergedData[] = postsResponse.data.map((post: Post) => {
+      const [user] = usersResponse.data.filter((user: User) => user.id === post.userId);
+      console.log(post)
+      return {
+      // userId: post.userId, // Add the userId property
+      name: user.name,
+      email: user.email,
+      company: user.company.name,
+      id: post.id,
+      title: post.title,
+      body: post.body,
+      };
+    });
 
-interface MergedData extends Post {
-  name: string;
-  email: string;
-  company: string;
-}
-
-export async function fetchTableData () {
-  'use server';
-    try {
-        const usersResponse = await axios.get<any>(
-          "https://jsonplaceholder.typicode.com/users"
-        );
-        const postsResponse = await axios.get<any>(
-          "https://jsonplaceholder.typicode.com/posts"
-        );
-        console.log(usersResponse.data)
-        const mergedData = postsResponse.data.map((post:any) => {
-          const user = usersResponse.data.filter(
-            (user:any) => user.id === post.userId
-          );
-          return {
-            name: user[0].name,
-            email: user[0].email,
-            company: user[0].company.name,
-            ...post,
-          };
-        })
-        
-        return mergedData.flat();
-        
-      } catch (error:unknown) {
-        console.error("Error fetching data:", error);
-        return {
-            error: getErrorMessage(error),
-        }
-      }
+    return mergedData.flat();
+  } catch (error: unknown) {
+    console.error("Error fetching data:", error);
+    return {
+      error: getErrorMessage(error),
+    };
+  }
 }
