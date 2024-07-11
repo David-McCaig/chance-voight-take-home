@@ -75,14 +75,21 @@ export default function Component({ fetchTableData }: any) {
     );
   }
 
+  const isMobile = /iPhone|Android|Windows Phone|BB10|BlackBerry|Tizen|KaiOS/i.test(navigator.userAgent);
+  console.log(isMobile);
+
   return (
     <Suspense>
       {/*TODO: Add a fallback loading component to display while the table data is being fetched */}
       <div className="flex min-h-screen flex-col items-center pt-2">
+        
         {loading ? (
           <LoadingTable />
         ) : (
+          <>
+         
           <Card className="w-11/12 h-11/12">
+            
             <CardHeader className="px-7">
               <CardTitle>User comments</CardTitle>
               <CardDescription>All the user comments</CardDescription>
@@ -139,8 +146,10 @@ export default function Component({ fetchTableData }: any) {
               </PaginationContent>
             </Pagination>
           </Card>
+          </>
         )}
       </div>
+   
     </Suspense>
   );
 }
